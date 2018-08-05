@@ -23,11 +23,14 @@ We are welcoming usage feedbacks & suggestions.
 - simple_pdf_bulk.pl -> create a PDF from multiple one page pdf's
 - simple_image_bulk.pl -> create a PDF from multiple jpeg images from given directory
 
-## To do
+## To Do
 - Elabrative Documentation
 - Step by Step Samples
 - Presently the text addtion set to all the pages. Facility to add custom content layer to specific document
 - Packaging for meta::cpan
+
+## Limitations
+- Presently the input contents pdf's should hbe single page only 
 
 ## Copyright and license
 
