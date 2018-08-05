@@ -27,6 +27,7 @@ We are welcoming usage feedbacks & suggestions.
 - Elabrative Documentation
 - Step by Step Samples
 - Presently the text addtion set to all the pages. Facility to add custom content layer to specific document
+- Packaging for meta::cpan
 
 ## Copyright and license
 
