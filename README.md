@@ -1,4 +1,4 @@
-# PDF_Composite
+# PDF::Composite
 Create PDF document from bulk of images or PDF documents. 
 
 ## Purpose & Usage
