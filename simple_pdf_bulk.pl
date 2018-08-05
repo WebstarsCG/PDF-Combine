@@ -26,7 +26,13 @@
                                             'font_size' => 16,  
                                             
                                             'pos' => {'x' =>27,
-                                                      'y' =>652},                                                                                 
+                                                     
+                                                      # represents from top to down.
+                                                      # If an image has height of 1000px.
+                                                      ## 1000 will represent top, 0 represents bottom
+                                                      'y' =>652 
+                                                      
+                                                      },                                                                                 
                                             
                                             'text'       => {'key'=>'title'},
                                         }
