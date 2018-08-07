@@ -30,7 +30,7 @@ We are welcoming usage feedbacks & suggestions.
 - Packaging for meta::cpan
 
 ## Limitations
-- Presently the input contents pdf's should hbe single page only 
+- Presently it will take only one page from PDF inputs 
 
 ## Copyright and license
 
