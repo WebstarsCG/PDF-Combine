@@ -51,7 +51,11 @@
                         });
         
         # set extra space to image area
-        $d->setImageExtra({'height'=>24});
+        $d->setImageExtra({
+                           'height'=>40,
+                           'width'=>40
+                           
+                           });
 
         print "Content-type:text/html\n\n";
         

@@ -20,10 +20,11 @@
             
             my $objref={
                 
-            'file_out'          => $_[1]->{'fileOut'}    || '',                
-            'content_dir'       => $_[1]->{'contentDir'} || '',
-            'content'           => $_[1]->{'content'}    || '',
-            'image_extra'       => $_[1]->{'imageExtra'} || '',
+            'file_out'          => $_[1]->{'fileOut'}     || '',                
+            'content_dir'       => $_[1]->{'contentDir'}  || '',
+            'content'           => $_[1]->{'content'}     || '',
+            'page_content'       => $_[1]->{'pageContent'} || '',
+            'image_extra'       => $_[1]->{'imageExtra'}  || '',
             
             'file_name_format'  => $_[1]->{'fileNameFormat'} || 'IN'  , # index and name
             
@@ -84,20 +85,27 @@
             shift @pages;
             shift @pages;
             
-            # Capture Pattern (Integer & Name)
+            # Capture Pattern (Integer & Name), Pattern based index capturing            
             $lv->{'file_capture'}->{'IN'} = { 'pattern'         => qr/(\d+\.*\d*)(\_?)(.*?)(\.(pdf|jpg))/is,
+                                              'file_num_idx'    => 0,
+                                              'file_spliter_idx'=> 1,
                                               'file_name_idx'   => 2,
-                                              'file_format_idx' => 3
+                                              'file_format_idx' => 3,
                                             };
             
             $lv->{file_capture_info}      = $lv->{'file_capture'}->{$self->{'file_name_format'}}; 
             
             # file name            
-            my $pattern         = $lv->{file_capture_info}->{'pattern'};
-            my $file_num_idx    = $lv->{file_capture_info}->{'file_num_idx'};
-            my $file_name_idx   = $lv->{file_capture_info}->{'file_name_idx'};
-            my $file_format_idx = $lv->{file_capture_info}->{'file_format_idx'};
+            my $pattern          = $lv->{file_capture_info}->{'pattern'};
+            my $file_num_idx     = $lv->{file_capture_info}->{'file_num_idx'};
+            my $file_name_idx    = $lv->{file_capture_info}->{'file_name_idx'};
+            my $file_format_idx  = $lv->{file_capture_info}->{'file_format_idx'};
+            my $file_spliter_idx = $lv->{file_capture_info}->{'file_spliter_idx'};
+            
             my $file_in;
+            
+            # page contet
+            $lv->{'page_content'} = $self->{'page_content'};
             
             # each screen            
             for my $page ( sort{ $a <=> $b} @pages){
@@ -107,13 +115,16 @@
                 $file_in->{'name'}    = $file_info[$file_name_idx];
                 $file_in->{'format'}  = $file_info[$file_format_idx];
                 $file_in->{'idx'}     = $file_info[$file_num_idx];
+                $file_in->{'spliter'} = $file_info[$file_spliter_idx];
+                $file_in->{'token'}   = lc($file_in->{'idx'}.$file_in->{'spliter'}.$file_in->{'name'});
+                
                 
                 if ($file_in->{'format'}=~m/(pdf|jpg)/){                    
                 
                     # page counter
                     $lv->{'page_no'}++;
                 
-                    if($file_in->{'idx'}){
+                    if($file_in->{'idx'} || $file_in->{'name'}){
                     
                         $lv->{'title'} = $file_in->{'name'};
                         $lv->{'title'}=~s/\_/ /g;                                
@@ -125,12 +136,24 @@
                     # each page additon                    
                     if($file_in->{'format'}=~m/pdf/){
                         
+                        # add global contents
                         for my $line (@{$self->{'content'}}){
                             
                             addTextLayer($self,$line,$lv) || die "error";                            
                         
-                        }
-                       
+                        } # end of global conents
+                        
+                        # page specific content                        
+                        if($lv->{'page_content'}->{$file_in->{'token'}}){
+                                                        
+                            for my $line (@{$lv->{'page_content'}->{$file_in->{'token'}}}){
+                                
+                                addTextLayer($self,$line,$lv) || die "error";                            
+                            } 
+                            
+                        } # end of check page specific content
+                        
+            
                         prDoc( { file  => $self->{'content_dir'}."/$page",
                                  first => 1,
                                  last  => 1 });
@@ -164,7 +187,13 @@
                             $lv->{'image_content'}  = prJpeg($self->{'content_dir'}."/$page",$lv->{'img_width'},$lv->{'img_height'});
                            
                             $lv->{'img_str'} = "q\n";
-                            $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} 0 0 cm\n";
+                            
+                            # the two parameters after width represents for skew
+                            # the two parameters after height left & bottom spaces
+                            
+                            #$lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} <padding_bottom> <padding_right> cm\n";
+                            
+                            $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} 20 20  cm\n";
                             $lv->{'img_str'}.= "/$lv->{'image_content'} Do\n";
                             $lv->{'img_str'}.= "Q\n";
                             prAdd($lv->{'img_str'});
@@ -349,8 +378,8 @@
             prFontSize($line->{'font_size'} || $self->{'_default'}->{'font_size'});
            
             prText($line->{'pos'}->{'x'},
-                  $line->{'pos'}->{'y'},
-                 (($line->{'text'}->{'key'})?$lv->{$line->{'text'}->{'key'}}:$line->{'text'})
+                   $line->{'pos'}->{'y'},
+                  (($line->{'text'}->{'key'})?$lv->{$line->{'text'}->{'key'}}:$line->{'text'})
             );
                           
         }

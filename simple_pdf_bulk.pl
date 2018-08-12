@@ -28,8 +28,8 @@
                                             'pos' => {'x' =>27,
                                                      
                                                       # represents from top to down.
-                                                      # If an image has height of 1000px.
-                                                      ## 1000 will represent top, 0 represents bottom
+                                                      # If the document has height of 1000px.
+                                                      # 1000 will represent top position of document, 0 represents bottom position
                                                       'y' =>652 
                                                       
                                                       },                                                                                 
@@ -37,6 +37,30 @@
                                             'text'       => {'key'=>'title'},
                                         }
                                     ],
+                                    
+                                    
+                                    # page content
+                                    'pageContent' => {
+                                                        '3_metacpan' => [
+                                                                    
+                                                                        {
+                                                                            'color'     => '0.5',
+                                                                            'font'      => 'Helvetica',
+                                                                            'font_size' => 16,  
+                                                                            
+                                                                            'pos' => {'x' =>490,
+                                                                                     
+                                                                                      # represents from top to down.
+                                                                                      # If the document has height of 1000px.
+                                                                                      # 1000 will represent top position of document, 0 represents bottom position
+                                                                                      'y' =>330 
+                                                                                      
+                                                                                      },                                                                                 
+                                                                            
+                                                                            'text'       =>'Give your search here...',
+                                                                        }
+                                                                    ]   
+                                                    }
                                     
                                 });
         
