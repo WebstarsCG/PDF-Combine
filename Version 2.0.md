@@ -1,6 +1,25 @@
 # Version 2.0
-##We updated a Version 2.0 with some key improvements in feature & communination
+We updated a Version 2.0 with some key improvements in feature & communination
 
-###Features
-####Text Position Update
-PDF::Reuse module by default handled y position relative to bottom. It has no issues with same size screens. When we handle varied size screens, it will be difficult. V2.0 updated with y position realtive to generic method of relative to top.
+### Features
+#### Text Position Update
+PDF::Reuse module by default handled y position relative to bottom. It has no issues with same size screens. When we handle varied size screens, it will be difficult. **V2.0** updated with y position realtive to generic method of relative to top.
+### Text colors in Hexadecimal
+As like y position, in color specification also PDF::Reuse follwed a RGB text '0 0 0'. **V2.0** now updated with color representation in Hexadecimal.
+### Image Area Padding
+Padding can be set now in PDF creation with images case.
+```perl
+# set padding to image area
+$d->setImagePadding({
+                   'left'   => 40,
+                   'top'    => 100,
+                   'right'  => 20,
+                   'bottom' => 20,
+                   });
+```
+### Default Background Frame
+Exporting screens with default header & footer designs worked fine. When there is a minor change in style format, presently we have to recreate all screen images. It's a time killer if we have more screens. **V2.0** updated with a document frame option, where the images added top of that. Combining with image padding we can quickly create documents with different header & footer styles.
+```perl
+# set frame        
+$d->setFrame("screens/jpg/frame.pdf");
+```
