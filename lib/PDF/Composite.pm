@@ -3,13 +3,16 @@
         # Package for Getting masters list
 
         package PDF::Composite;
-        
+       
+                
         use Data::Dumper;
         
         use PDF::Reuse;
 
-        use Image::Info qw(image_info dim);       
+        use Image::Info qw(image_info dim);
         
+        use PDF::Color::Rgb;
+       
         #use Image::Info qw(image_info dim);
                            
         # package
@@ -20,11 +23,15 @@
             
             my $objref={
                 
-            'file_out'          => $_[1]->{'fileOut'}     || '',                
-            'content_dir'       => $_[1]->{'contentDir'}  || '',
-            'content'           => $_[1]->{'content'}     || '',
-            'page_content'       => $_[1]->{'pageContent'} || '',
-            'image_extra'       => $_[1]->{'imageExtra'}  || '',
+            
+            'content_dir'       => $_[1]->{'contentDir'}    || '',
+            'content'           => $_[1]->{'content'}       || '',
+            'file_out'          => $_[1]->{'fileOut'}       || '',
+            'frame'             => $_[1]->{'frame'}         || '',
+            'image_extra'       => $_[1]->{'imageExtra'}    || '',
+            'image_padding'     => $_[1]->{'imagePadding'}  || {'left'=>0,'top'=>0,'right'=>0,'bottom'=>0},
+            'page_content'      => $_[1]->{'pageContent'}   || '',
+            
             
             'file_name_format'  => $_[1]->{'fileNameFormat'} || 'IN'  , # index and name
             
@@ -42,7 +49,9 @@
                                      'font_size'        => '16',
                                      'color'            => 0,
                                      'file_name_format' => 'IN'
-                                    }
+                                    },
+            
+             'clr'               => new Color::Rgb()
             
             };
             
@@ -135,10 +144,17 @@
                                                             
                     # each page additon                    
                     if($file_in->{'format'}=~m/pdf/){
+                                               
                         
+                        my @vec =  prForm($self->{'content_dir'}."/$page");
+                        
+                        my ($from, $pos) = prText(0,0,'');
+                        
+                        $lv->{'img_mbox_height'}=$vec[4];
+                                                
                         # add global contents
                         for my $line (@{$self->{'content'}}){
-                            
+                                                        
                             addTextLayer($self,$line,$lv) || die "error";                            
                         
                         } # end of global conents
@@ -162,28 +178,25 @@
                     
                     if($file_in->{'format'}=~m/jpg/){
                         
+                            
+                            # frame                        
+                            if ($self->{'frame'}) {
+                                prForm($self->{'frame'}); 
+                            }
+                        
                             # get image
                             $lv->{'src_image'} = image_info($self->{'content_dir'}."/$page");
                             
                             ($lv->{'img_width'},$lv->{'img_height'})  = dim($lv->{'src_image'});
                             
                             $lv->{'img_extra'}  = $self->{'image_extra'};
-                        
-                            #print Dumper($lv->{'img_extra'});
-                        
-                            $lv->{'img_mbox_width'}  = ($lv->{'img_extra'}->{'width'})?($lv->{'img_width'}+$lv->{'img_extra'}->{'width'}):$lv->{'img_width'};
-                            $lv->{'img_mbox_height'} = ($lv->{'img_extra'}->{'height'})?($lv->{'img_height'}+$lv->{'img_extra'}->{'height'}):$lv->{'img_height'};
+                       
+                            $lv->{'img_mbox_width'}  = ($lv->{'img_width'}+$self->{'image_padding'}->{'left'}+$self->{'image_padding'}->{'right'});
+                            $lv->{'img_mbox_height'} = ($lv->{'img_height'}+$self->{'image_padding'}->{'top'}+$self->{'image_padding'}->{'bottom'});
                         
                             # page box
                             prMbox (0,0,$lv->{'img_mbox_width'},$lv->{'img_mbox_height'});
-                            
-                            # each line
-                            for my $line (@{$self->{'content'}}){                                            
-                            
-                                addTextLayer($self,$line,$lv) || die "error";
-                            
-                            } # end
-                    
+                           
                             $lv->{'image_content'}  = prJpeg($self->{'content_dir'}."/$page",$lv->{'img_width'},$lv->{'img_height'});
                            
                             $lv->{'img_str'} = "q\n";
@@ -191,13 +204,20 @@
                             # the two parameters after width represents for skew
                             # the two parameters after height left & bottom spaces
                             
-                            #$lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} <padding_bottom> <padding_right> cm\n";
+                            #$lv->{'img_str'}.= "$lv->{img_width} <skew right> <perspective left> $lv->{img_height} <padding_left> <padding_bottom> cm\n";
                             
-                            $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} 20 20  cm\n";
+                            $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} $self->{'image_padding'}->{'left'} $self->{'image_padding'}->{'bottom'}  cm\n";
                             $lv->{'img_str'}.= "/$lv->{'image_content'} Do\n";
                             $lv->{'img_str'}.= "Q\n";
                             prAdd($lv->{'img_str'});
+                           
+                            # each line
+                            for my $line (@{$self->{'content'}}){                                            
                             
+                                addTextLayer($self,$line,$lv) || die "error";
+                            
+                            } # end
+                             
                             prPage();
                     }
                                         
@@ -230,6 +250,27 @@
             my $param   = shift @_;
             
             $self->{'file_out'} = $param;
+            
+            return 1;        
+        }
+        
+        # get frame
+        sub getFrame(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            
+            return $self->{'frame'};
+        
+        }
+        
+        # set frame
+        sub setFrame(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            
+            $self->{'frame'} = $param;
             
             return 1;        
         }
@@ -317,7 +358,7 @@
             my $self    = shift @_;            
             my $param   = shift @_;
             
-            $self->{'image_extra'} = $param;             
+            $self->{'image_padding'} = $param;             
             
             return 1;
         }
@@ -329,6 +370,31 @@
             my $param   = shift @_;
             
             return $self->{'image_extra'};
+        }
+        
+        
+        # set image extra
+        sub setImagePadding(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            
+            for my $area(qw/left top right bottom/){
+            
+                $self->{'image_padding'}->{$area} = $param->{$area}   if($param->{$area})             
+            
+            }
+            
+            return 1;
+        }
+        
+        # get content
+        sub getImagePadding(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            
+            return $self->{'image_padding'};
         }
         
         # set Content
@@ -363,25 +429,60 @@
             return 1;
         }
         
-        
+        # text layer
         sub addTextLayer(){
             
             my $self  = shift @_;
-            my $line = shift @_;
+            my $line  = shift @_;
             
             my $lv = shift @_;
-                           
-            prAdd("$line->{color} $line->{color} $line->{color} rg\n");
+           
+            prAdd($self->hex2pdfrgb($line->{'color'})." rg\n");
            
             prFont($line->{font} || $self->{'_default'}->{'font'});
            
             prFontSize($line->{'font_size'} || $self->{'_default'}->{'font_size'});
+                      
+            $line->{'pos'}->{'yi'} = ($lv->{'img_mbox_height'}-$line->{'pos'}->{'y'});
            
             prText($line->{'pos'}->{'x'},
-                   $line->{'pos'}->{'y'},
+                   $line->{'pos'}->{'yi'},
                   (($line->{'text'}->{'key'})?$lv->{$line->{'text'}->{'key'}}:$line->{'text'})
             );
+            
+            return 1;
                           
+        }
+        
+        
+        # hex to rgb 
+        sub hex2pdfrgb(){
+            
+            my $self  = shift @_;
+            my $param = shift @_;
+            
+            my $lv;
+            
+            $lv->{'default_clr'}= '1 1 1';
+            
+            
+            if($param=~m/(\#*)([0-9a-fA-F]){3,6}/){
+                           
+               
+                
+                @{$lv->{'rgb'}}      = $self->{'clr'}->hex2rgb($param);
+                
+                @{$lv->{'pdf_rgb'}}  = map{ sprintf("%.3f",($_/255)) } @{$lv->{'rgb'}};
+                
+                $lv->{'pdf_rgb_clr'} = join(' ',@{$lv->{'pdf_rgb'}});
+                
+                return $lv->{'pdf_rgb_clr'};
+            
+            }else{
+                
+                return $lv->{'default_clr'};    
+            }
+
         }
         
     1;

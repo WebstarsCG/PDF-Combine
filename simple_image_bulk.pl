@@ -5,6 +5,8 @@
             use lib 'lib/';            
         }
         
+        use CGI::Carp qw/fatalsToBrowser/;
+        
         # include lib
         use PDF::Composite;        
         
@@ -14,47 +16,54 @@
         # set content dir
         $d->setContentDir("screens/jpg");
         
+        # set frame        
+        $d->setFrame("screens/jpg/frame.pdf");
+        
         # set output file name
         $d->setFileOut("pdfs/perl_website_jpg_screens_bulk.pdf");          
         
         # content to show default document page title
         $d->addContent({
-                        'font'     =>'Arial-bold', 
+            
+                        'color'     => '#626262',
                         
-                        'pos' => {'x'  =>20,
-                                  'y'  =>650},
-                        'text'=> {'key'=>'title'}});
+                        'font'      => 'Arial-bold', 
+                        
+                        'pos'       => {'x'  =>50,
+                                        'y'  =>40},
+                        'text'      => {'key'=>'title'}}
+                    );
                         
         
         # content to show current page no
-        $d->addContent({
-                        
-                        'color' => 0.5,
+        $d->addContent({'color' => '#ffefb2',
                         
                         'font_size'=>12,
                         
                         'pos' => {'x'  =>1200,
-                                  'y'  =>650},                        
+                                  'y'  =>40},                        
                         'text'=> {'key'=>'page_no'}}); 
                         
         # custom text
         $d->addContent({
+                        'color' => '#b28e00',
                         
                         'font_size'=>13,
                         
                         'font'     =>'Helvetica-bold', 
                         
                         'pos' => {'x'  =>1210,
-                                  'y'  =>650},                        
+                                  'y'  =>40},                        
                         'text'=> '| PDF::Composite',
                         
                         });
         
         # set extra space to image area
-        $d->setImageExtra({
-                           'height'=>40,
-                           'width'=>40
-                           
+        $d->setImagePadding({
+                           'left'   => 40,
+                           'top'    => 100,
+                           'right'  => 20,
+                           'bottom' => 20,
                            });
 
         print "Content-type:text/html\n\n";

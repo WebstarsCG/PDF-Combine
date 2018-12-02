@@ -6,8 +6,8 @@
         }
         
         # include lib
-        use PDF::Composite;        
-        
+        use PDF::Composite;
+                
         # object instance with configuration                             
         my $d = new PDF::Composite({
                                     
@@ -21,20 +21,40 @@
                                     'content'=>[
                                                                     
                                         {
-                                            'color'     => '0',
+                                            # text color
+                                            'color'     => '#545454',
+                                            
+                                            # font
                                             'font'      => 'Helvetica',
+                                            
+                                            # text size
                                             'font_size' => 16,  
                                             
-                                            'pos' => {'x' =>27,
-                                                     
-                                                      # represents from top to down.
-                                                      # If the document has height of 1000px.
-                                                      # 1000 will represent top position of document, 0 represents bottom position
-                                                      'y' =>652 
-                                                      
-                                                      },                                                                                 
+                                            # position
+                                            'pos'       => {'x' =>20,                                                     
+                                                            'y' =>18},                                                                                 
                                             
+                                            # text with key for default information
                                             'text'       => {'key'=>'title'},
+                                        },
+                                        
+                                        
+                                        {
+                                            # text color
+                                            'color'     => '#fff4cc',
+                                            
+                                            # font
+                                            'font'      => 'Helvetica',
+                                            
+                                            # text size
+                                            'font_size' => 12,  
+                                            
+                                            # position
+                                            'pos'       => {'x' =>1250,                                                     
+                                                            'y' =>18},                                                                                 
+                                            
+                                            # text with key for default information
+                                            'text'       => 'Perl Sites'
                                         }
                                     ],
                                     
@@ -44,19 +64,14 @@
                                                         '3_metacpan' => [
                                                                     
                                                                         {
-                                                                            'color'     => '0.5',
+                                                                            'color'     => '#818181',
                                                                             'font'      => 'Helvetica',
                                                                             'font_size' => 16,  
                                                                             
-                                                                            'pos' => {'x' =>490,
-                                                                                     
-                                                                                      # represents from top to down.
-                                                                                      # If the document has height of 1000px.
-                                                                                      # 1000 will represent top position of document, 0 represents bottom position
-                                                                                      'y' =>330 
-                                                                                      
-                                                                                      },                                                                                 
+                                                                            'pos'       => {'x' =>490,
+                                                                                            'y' =>340},                                                                                 
                                                                             
+                                                                            # custom text
                                                                             'text'       =>'Give your search here...',
                                                                         }
                                                                     ]   
