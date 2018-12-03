@@ -1,12 +1,12 @@
 # Version 2.0
 We updated a Version 2.0 with some key improvements in feature & communination
 
-### Features
+## Features
 #### Text Position Update
 PDF::Reuse module by default handled _y position_ relative to bottom. It has no issues with same size screens. When we handle varied size screens, it will be difficult to handle. **V2.0** updated with y position realtive to generic method of relative to top.
-### Text colors in Hexadecimal
+#### Text colors in Hexadecimal
 As like y position, PDF::Reuse follwed a text specification like _'0 0 0' to '1 1 1' for RGB color specificaion_. **V2.0** now updated with color representation in Hexadecimal.
-### Image Area Padding
+#### Image Area Padding
 Padding can be set now in PDF creation with images case.
 ```perl
 # set padding to image area
