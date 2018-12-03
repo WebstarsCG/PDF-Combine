@@ -29,13 +29,13 @@ In some use cases, we come across specific screen based additional content requi
 ```perl
 # custom page content
 $d->setPageContent({
+                        # file name of the screen without extension as a key
                         '3_metacpan' => [                                                                           
                                             {
                                                 'color'     => '#818181',
                                                 'font'      => 'Helvetica',
                                                 'font_size' => 16,                                                          
-                                                'pos'       => {'x' =>520,
-                                                                'y' =>415},                                                                                                                                         
+                                                'pos'       => {'x' =>520,'y' =>415},                                                                                                                                         
                                                 # custom text
                                                 'text'       =>'Give your search here...',
                                             }
