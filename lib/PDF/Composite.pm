@@ -169,6 +169,7 @@
                             
                         } # end of check page specific content
                         
+                        
             
                         prDoc( { file  => $self->{'content_dir'}."/$page",
                                  first => 1,
@@ -217,7 +218,17 @@
                                 addTextLayer($self,$line,$lv) || die "error";
                             
                             } # end
-                             
+                            
+                            # page specific content                        
+                            if($lv->{'page_content'}->{$file_in->{'token'}}){
+                                                            
+                                for my $line (@{$lv->{'page_content'}->{$file_in->{'token'}}}){
+                                    
+                                    addTextLayer($self,$line,$lv) || die "error";                            
+                                } 
+                                
+                            } # end of check page specific content
+                                                    
                             prPage();
                     }
                                         
@@ -397,7 +408,7 @@
             return $self->{'image_padding'};
         }
         
-        # set Content
+        # set Page Content
         sub setContent(){
             
             my $self    = shift @_;            
@@ -409,7 +420,7 @@
             return 1;
         }
         
-        # get content
+        # get Page Content
         sub getContent(){
             
             my $self    = shift @_;            
@@ -427,6 +438,27 @@
             push(@{$self->{'content'}},$param);            
             
             return 1;
+        }
+        
+         # set Content
+        sub setPageContent(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            
+            my $current = $self->{'page_content'};            
+            $self->{'page_content'} = $param;             
+            
+            return 1;
+        }
+        
+        # get content
+        sub getPageContent(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            
+            return $self->{'page_content'};
         }
         
         # text layer

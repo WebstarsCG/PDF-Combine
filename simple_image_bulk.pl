@@ -58,6 +58,26 @@
                         
                         });
         
+        # custom page content
+        $d->setPageContent({
+                                '3_metacpan' => [
+                                                                           
+                                                    {
+                                                        'color'     => '#818181',
+                                                        'font'      => 'Helvetica',
+                                                        'font_size' => 16,  
+                                                        
+                                                        'pos'       => {'x' =>520,
+                                                                        'y' =>415},                                                                                 
+                                                        
+                                                        # custom text
+                                                        'text'       =>'Give your search here...',
+                                                    }
+                                                
+                                                ]   
+                        
+                        });
+        
         # set extra space to image area
         $d->setImagePadding({
                            'left'   => 40,
