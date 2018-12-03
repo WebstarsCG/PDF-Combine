@@ -17,7 +17,7 @@ $d->setImagePadding({
                    'bottom' => 20,
                    });
 ```
-### Default Background Frame
+#### Default Background Frame
 Exporting screens with default header & footer designs worked fine. When there is a minor change in style format, presently we have to recreate all screen images. It's a time killer if we have more screens. **V2.0** updated with a document frame option, where the images added top of that. Combining with image padding we can quickly create documents with different header & footer styles.
 ```perl
 # set frame        
