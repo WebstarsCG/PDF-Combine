@@ -30,7 +30,7 @@ In some use cases, we come across specific screen based additional content requi
 # custom page content
 $d->setPageContent({
                         # file name of the screen without extension as a key
-                        '3_metacpan' => [                                                                           
+                        '3_metacpan' => [    
                                             {
                                                 'color'     => '#818181',
                                                 'font'      => 'Helvetica',
@@ -39,6 +39,6 @@ $d->setPageContent({
                                                 # custom text
                                                 'text'       =>'Give your search here...',
                                             }
-                                        ]   
-                  });                  
+                                        ]
+                  });
 ```
