@@ -65,9 +65,9 @@
                                                     {
                                                         'color'     => '#818181',
                                                         'font'      => 'Helvetica',
-                                                        'font_size' => 16,  
+                                                        'font_size' => 32,  
                                                         
-                                                        'pos'       => {'x' =>520,
+                                                        'pos'       => {'x' =>50,
                                                                         'y' =>415},                                                                                 
                                                         
                                                         # custom text
