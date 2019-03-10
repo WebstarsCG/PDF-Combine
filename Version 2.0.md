@@ -23,3 +23,22 @@ Exporting screens with default header & footer designs worked fine. When there i
 # set frame        
 $d->setFrame("screens/jpg/frame.pdf");
 ```
+#### Custom Page Content
+In some use cases, we come across specific screen based additional content requirements addon to all page general content. **V2.0** updated with set page level contents in a bulk HoA way.
+
+```perl
+# custom page content
+$d->setPageContent({
+                        # file name of the screen without extension as a key
+                        '3_metacpan' => [   
+                                            {
+                                                'color'     => '#818181',
+                                                'font'      => 'Helvetica',
+                                                'font_size' => 16,
+                                                'pos'       => {'x' =>520,'y' =>415},
+                                                # custom text
+                                                'text'       =>'Give your search here...',
+                                            }
+                                        ]
+                  });
+```
