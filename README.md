@@ -24,6 +24,7 @@ We are welcoming usage feedbacks & suggestions.
 - screens/pdf has sample pdf's for demo
 - screens/jpg has sample jpeg images for demo
 - screens/frame has sample frame for demo
+- screens/csv has csv data for template based demo
 - pdfs -> area for storing created pdf documents
 
 ## To Do
