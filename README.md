@@ -13,20 +13,19 @@ We are welcoming usage feedbacks & suggestions.
 ## How to
 - Make sure the availability of modules PDF::Reuse & Image::Info
 - Check the samples 
--- simple_image_bulk.pl
--- simple_pdf_bulk.pl
-- The Object Instance will take inputs from both Bulk AoH input and propoerty level set & get methods
+  -  simple_pdf_bulk.pl -> create a PDF from multiple one page pdf's
+  -  simple_image_bulk.pl -> create a PDF from multiple jpeg images from given directory
+  -  simple_template.pl -> create a PDF from template and content from AoA
+  -  simple_template_csv.pl -> create a PDF from template and content from CSV file
+  - The Object Instance will take inputs from both Bulk AoH input and propoerty level set & get methods
 
-## Files
+## Directories
 - lib/PDF has the library module
 - screens/pdf has sample pdf's for demo
 - screens/jpg has sample jpeg images for demo
 - screens/frame has sample frame for demo
 - pdfs -> area for storing created pdf documents
-- simple_pdf_bulk.pl -> create a PDF from multiple one page pdf's
-- simple_image_bulk.pl -> create a PDF from multiple jpeg images from given directory
-- simple_template.pl -> create a PDF from template and content from AoA
-- simple_template_csv.pl -> create a PDF from template and content from CSV file
+
 ## To Do
 - Elabrative Documentation
 - Step by Step Samples
