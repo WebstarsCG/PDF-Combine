@@ -24,13 +24,15 @@
             my $objref={
                 
             
-            'content_dir'       => $_[1]->{'contentDir'}    || '',
-            'content'           => $_[1]->{'content'}       || '',
-            'file_out'          => $_[1]->{'fileOut'}       || '',
-            'frame'             => $_[1]->{'frame'}         || '',
-            'image_extra'       => $_[1]->{'imageExtra'}    || '',
-            'image_padding'     => $_[1]->{'imagePadding'}  || {'left'=>0,'top'=>0,'right'=>0,'bottom'=>0},
-            'page_content'      => $_[1]->{'pageContent'}   || '',
+            'content_dir'       => $_[1]->{'contentDir'}        || '',
+            'content'           => $_[1]->{'content'}           || '',
+            'file_out'          => $_[1]->{'fileOut'}           || '',
+            'frame'             => $_[1]->{'frame'}             || '',
+            'image_extra'       => $_[1]->{'imageExtra'}        || '',
+            'image_padding'     => $_[1]->{'imagePadding'}      || {'left'=>0,'top'=>0,'right'=>0,'bottom'=>0},
+            'page_content'      => $_[1]->{'pageContent'}       || undef,
+            'template_content'  => $_[1]->{'templateContent'}   || undef,
+            'template_style'    => $_[1]->{'templateStyle'}     || undef,
             
             
             'file_name_format'  => $_[1]->{'fileNameFormat'} || 'IN'  , # index and name
@@ -51,7 +53,9 @@
                                      'file_name_format' => 'IN'
                                     },
             
-             'clr'               => new Color::Rgb()
+             'clr'               => new Color::Rgb(),
+             
+             
             
             };
             
@@ -61,11 +65,45 @@
             
         } # end
 
+        # set        
+        sub set(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            my $key  = shift @_;
+            
+            $self->{$key} = $param;
+            
+            return 1;
+        }
+        
+        sub get(){
+            
+            my $self    = shift @_;                     
+            my $key  = shift @_;
+            
+            return $self->{$key};
+            
+        }
+        
+        sub add(){
+            
+            my $self    = shift @_;            
+            my $param   = shift @_;
+            my $key  = shift @_;
+                         
+            push(@{$self->{$key}},$param);            
+            
+            return 1;            
+        }
+
+
 
         sub process(){
             
             my $self    = shift @_;            
             my $param   = shift @_;
+            my @pages;
             
             my $lv;
             $lv->{'page_no'} = 0;
@@ -84,16 +122,22 @@
                     CenterWindow => $self->{'_options'}->{'center_window'}  || 0
                 });
             
-                                         
-            # dir            
-            opendir(my $dh,$self->{'content_dir'}) || die "Can't opendir : $!";            
-            my @pages = readdir($dh);            
-            closedir $dh;
+           
             
-            # remove top 2
-            shift @pages;
-            shift @pages;
+            if ($self->{'content_dir'}) {
+                                   
+                # dir            
+                opendir(my $dh,$self->{'content_dir'}) || die "Can't opendir : $!";            
+                @pages = readdir($dh);            
+                closedir $dh;
+                
+                # remove top 2
+                shift @pages;
+                shift @pages;
+                
+            }
             
+                
             # Capture Pattern (Integer & Name), Pattern based index capturing            
             $lv->{'file_capture'}->{'IN'} = { 'pattern'         => qr/(\d+\.*\d*)(\_?)(.*?)(\.(pdf|jpg))/is,
                                               'file_num_idx'    => 0,
@@ -115,7 +159,7 @@
             
             # page contet
             $lv->{'page_content'} = $self->{'page_content'};
-            
+                        
             # each screen            
             for my $page ( sort{ $a <=> $b} @pages){
                 
@@ -126,7 +170,7 @@
                 $file_in->{'idx'}     = $file_info[$file_num_idx];
                 $file_in->{'spliter'} = $file_info[$file_spliter_idx];
                 $file_in->{'token'}   = lc($file_in->{'idx'}.$file_in->{'spliter'}.$file_in->{'name'});
-                
+                               
                 
                 if ($file_in->{'format'}=~m/(pdf|jpg)/){                    
                 
@@ -146,8 +190,7 @@
                     if($file_in->{'format'}=~m/pdf/){
                                                
                         
-                        my @vec =  prForm($self->{'content_dir'}."/$page");
-                        
+                        my @vec          =  prForm($self->{'content_dir'}."/$page");                        
                         my ($from, $pos) = prText(0,0,'');
                         
                         $lv->{'img_mbox_height'}=$vec[4];
@@ -169,8 +212,7 @@
                             
                         } # end of check page specific content
                         
-                        
-            
+                        # doc                        
                         prDoc( { file  => $self->{'content_dir'}."/$page",
                                  first => 1,
                                  last  => 1 });
@@ -179,7 +221,6 @@
                     
                     if($file_in->{'format'}=~m/jpg/){
                         
-                            
                             # frame                        
                             if ($self->{'frame'}) {
                                 prForm($self->{'frame'}); 
@@ -234,7 +275,60 @@
                                         
                 } # if
                 
-            } # end
+            } # each item end
+            
+            
+            # template
+            if ($self->{'template_content'}) {
+                               
+                    # frame                        
+                    if($self->{'frame'}){                                                
+                                                    
+                        my @vec                 =  prForm($self->{'frame'});                        
+                        
+                        my ($from, $pos)        = prText(0,0,'');
+                        
+                        $lv->{'img_mbox_height'}=$vec[4];
+                        
+                        # each content                        
+                        for my $template_content(@{$self->{'template_content'}}){
+                            
+                            # each line
+                            
+                            $lv->{'var_index'} = 0;
+                            
+                            for my $line (@{$self->{'template_style'}}){
+                                
+                                if ($line->{'is_img'}) {
+                                    
+                                    $line->{'src'} = ($template_content->[$lv->{'var_index'}])?$template_content->[$lv->{'var_index'}]:$line->{'default'};
+                            
+                                    $line->{'yi'}  = ($lv->{'img_mbox_height'}-$line->{'y'}); 
+                            
+                                    addImage($self,$line);
+                                    
+                                }else{
+                                    
+                                    $line->{'text'}=$template_content->[$lv->{'var_index'}];
+                            
+                                    addTextLayer($self,$line,$lv) || die "error";
+                                
+                                }
+                                
+                                 $lv->{'var_index'}++;
+                            
+                            } # end
+                    
+                            # doc                        
+                            prDoc({ file  => $self->{'frame'},
+                                    first => 1,
+                                    last  => 1 });
+                            
+                        } # each content
+                         
+                    } # frame  
+                           
+            } # template             
             
             # close
             
@@ -461,6 +555,72 @@
             return $self->{'page_content'};
         }
         
+        # set template content
+        sub setTemplateContent(){
+            
+            $_[0]->set($_[1],'template_content');
+        }
+        
+        # add template content
+        sub addTemplateContent(){
+                     
+            return $_[0]->add($_[1],'template_content');            
+        }
+        
+        # get template content
+        sub getTemplateContent(){
+            
+            return $_[0]->get('template_content'); 
+        }
+        
+        # get template content from CSV
+        sub setTemplateContentFromCSV(){
+        
+            my $lv;
+            
+            use DBI;
+            
+            use File::Basename;
+            
+            ($lv->{'name'},$lv->{'path'},$lv->{'suffix'}) = fileparse($_[1]);
+            
+            	
+            my $cdbh    =   DBI->connect( "dbi:CSV:", "", "", {
+                                            f_dir           => "$lv->{path}",
+                                            csv_tables      =>{
+							       csv_data  => { f_file   => "$lv->{'name'}.$lv->{'suffix'}"   },
+							    
+                                                            }
+                                    });
+            
+            $lv->{'csv_data'} = $cdbh->selectall_arrayref("SELECT * FROM csv_data");
+            
+            $_[0]->set($lv->{'csv_data'},'template_content');
+        
+            $cdbh->disconnect();
+            
+            return $lv->{'csv_data'};
+        
+        } # end
+        
+        
+        # set template style
+        sub setTemplateStyle(){
+            
+            $_[0]->set($_[1],'template_style');
+        }
+        
+        # add template content
+        sub addTemplateStyle(){
+                     
+            return $_[0]->add($_[1],'template_style');            
+        }
+        
+        # get template content
+        sub getTemplateStyle(){
+            
+            return $_[0]->get('template_style'); 
+        }
         # text layer
         sub addTextLayer(){
             
@@ -515,6 +675,49 @@
                 return $lv->{'default_clr'};    
             }
 
+        } # end
+        
+        # add imaeg
+        
+        sub addImage(){
+            
+            my $self  = shift @_;
+            my $param = shift @_;
+            
+            my $lv;
+            
+            # get image
+            $lv->{'src_image'} = image_info($param->{'src'});
+            
+            ($lv->{'img_width'},$lv->{'img_height'})  = dim($lv->{'src_image'});
+                        
+            #$lv->{'img_mbox_width'}  = ($lv->{'img_width'}+$self->{'image_padding'}->{'left'}+$self->{'image_padding'}->{'right'});
+            #$lv->{'img_mbox_height'} = ($lv->{'img_height'}+$self->{'image_padding'}->{'top'}+$self->{'image_padding'}->{'bottom'});
+            #
+            # page box
+            prMbox (0,0,$lv->{'img_width'},$lv->{'img_height'});
+           
+            $lv->{'image_content'}  = prJpeg($param->{'src'},$lv->{'img_width'},$lv->{'img_height'});
+           
+            $lv->{'img_str'} = "q\n";
+            
+            if($param->{scale}){
+                
+                $lv->{img_width}  = ($lv->{img_width}*($param->{scale}/100));
+                $lv->{img_height} = ($lv->{img_height}*($param->{scale}/100));
+            }
+            
+            
+            # the two parameters after width represents for skew
+            # the two parameters after height left & bottom spaces
+            
+            #$lv->{'img_str'}.= "$lv->{img_width} <skew right> <perspective left> $lv->{img_height} <padding_left> <padding_bottom> cm\n";
+            
+            $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} $param->{'x'} $param->{'yi'}  cm\n";
+            $lv->{'img_str'}.= "/$lv->{'image_content'} Do\n";
+            $lv->{'img_str'}.= "Q\n";
+            prAdd($lv->{'img_str'})
+                        
         }
         
     1;

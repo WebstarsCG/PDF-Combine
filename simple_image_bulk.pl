@@ -17,7 +17,7 @@
         $d->setContentDir("screens/jpg");
         
         # set frame        
-        $d->setFrame("screens/jpg/frame.pdf");
+        $d->setFrame("screens/frame/frame.pdf");
         
         # set output file name
         $d->setFileOut("pdfs/perl_website_jpg_screens_bulk.pdf");          
@@ -63,11 +63,12 @@
                                 '3_metacpan' => [
                                                                            
                                                     {
+                                                        
                                                         'color'     => '#818181',
                                                         'font'      => 'Helvetica',
-                                                        'font_size' => 32,  
+                                                        'font_size' => 16,  
                                                         
-                                                        'pos'       => {'x' =>50,
+                                                        'pos'       => {'x' =>520,
                                                                         'y' =>415},                                                                                 
                                                         
                                                         # custom text
