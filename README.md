@@ -12,7 +12,9 @@ We are welcoming usage feedbacks & suggestions.
 
 ## How to
 - Make sure the availability of modules PDF::Reuse & Image::Info
-- Check the samples simple_image_bulk.pl & simple_pdf_bulk.pl
+- Check the samples 
+-- simple_image_bulk.pl
+-- simple_pdf_bulk.pl
 - The Object Instance will take inputs from both Bulk AoH input and propoerty level set & get methods
 
 ## Files
