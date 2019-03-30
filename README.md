@@ -19,14 +19,15 @@ We are welcoming usage feedbacks & suggestions.
 - lib/PDF has the library module
 - screens/pdf has sample pdf's for demo
 - screens/jpg has sample jpeg images for demo
+- screens/frame has sample frame for demo
 - pdfs -> area for storing created pdf documents
 - simple_pdf_bulk.pl -> create a PDF from multiple one page pdf's
 - simple_image_bulk.pl -> create a PDF from multiple jpeg images from given directory
-
+- simple_template.pl -> create a PDF from template and content from AoA
+- simple_template_csv.pl -> create a PDF from template and content from CSV file
 ## To Do
 - Elabrative Documentation
 - Step by Step Samples
-- Presently the text addtion set to all the pages. Facility to add custom content layer to specific document
 - Packaging for meta::cpan
 
 ## Limitations
