@@ -9,7 +9,6 @@ We worked out a small pdf document creations script based on Perl module PDF::Re
 We hope it may helpful in smilar needs. The module available with basic usage method & we are improving documentation. 
 We are welcoming usage feedbacks & suggestions.
 
-
 ## How to
 - Make sure the availability of modules PDF::Reuse & Image::Info
 - Check the samples 
