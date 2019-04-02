@@ -10,7 +10,9 @@ We hope it may helpful in smilar needs. The module available with basic usage me
 We are welcoming usage feedbacks & suggestions.
 
 ## How to
-- Make sure the availability of modules PDF::Reuse & Image::Info
+- Make sure the availability of modules 
+  -  PDF::Reuse
+  -  Image::Info
 - Check the samples 
   -  simple_pdf_bulk.pl -> create a PDF from multiple one page pdf's
   -  simple_image_bulk.pl -> create a PDF from multiple jpeg images from given directory
