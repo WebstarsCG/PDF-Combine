@@ -1,3 +1,12 @@
+# Version 2.1
+
+## 2.1 Improvements
+
+#### Template Based PDF generation
+There are cases, we have to produce bulk PDF documents based on fixed design with content changes. It's may be a simple invitation to a list of friends or Company ID Card/Certificate will fit in that. 
+
+Now PDF::Composite offers a Template based content generation over a fixed design frame. The content can be defined in AoA or simply a .csv file. Each column style can be defined with position & styling attributes.
+
 # Version 2.0
 We updated a Version 2.0 with some key improvements in feature & communination
 
