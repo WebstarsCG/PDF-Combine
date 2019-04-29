@@ -30,16 +30,16 @@
                         'pos'       => {'x'  =>170,
                                         'y'  =>465}
                     });
-        
+         
          $d->addTemplateStyle({            
                         'is_img'    => 1,                      
                         'x'         => 180,
                         'y'         => 690,
                         'scale'     => 75
                     });
-        
+         
         # set output file name
-        $d->setFileOut("pdfs/perl_template.pdf");          
+        $d->setFileOut("pdfs/perl_template_ii.pdf");          
         
         print "Content-type:text/html\n\n";
         

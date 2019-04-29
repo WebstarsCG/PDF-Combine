@@ -1,21 +1,18 @@
 #!/usr/bin/perl -w
 
-        # Package for Getting masters list
-
         package PDF::Composite;
-       
+        
+        # system modules
                 
         use Data::Dumper;
         
         use PDF::Reuse;
 
         use Image::Info qw(image_info dim);
-        
+                
         use PDF::Color::Rgb;
-       
-        #use Image::Info qw(image_info dim);
                            
-        # package
+        # construct
         
         sub new(){
             
@@ -47,15 +44,20 @@
                                     },
             
             '_default'           => {
-                                     'font'             => 'Helvetica',
-                                     'font_size'        => '16',
-                                     'color'            => 0,
-                                     'file_name_format' => 'IN'
+                                        'font'             => 'Helvetica',
+                                        'font_size'        => '16',
+                                        'color'            => 0,
+                                        'file_name_format' => 'IN',
+                                        'size_conversion'  => 0.75,
+                                        'scale'            => 'PXTOPT'
                                     },
             
-             'clr'               => new Color::Rgb(),
-             
-             
+            'clr'               =>  new Color::Rgb(),
+            
+            'scale'             => undef,
+            
+            'scale_ratio'       =>  { 'PXTOPT' => 0.75,
+                                      'PT'     => 1},             
             
             };
             
@@ -70,13 +72,14 @@
             
             my $self    = shift @_;            
             my $param   = shift @_;
-            my $key  = shift @_;
+            my $key     = shift @_;
             
-            $self->{$key} = $param;
-            
+            $self->{$key} = $param;            
             return 1;
-        }
+            
+        } # end
         
+        # get 
         sub get(){
             
             my $self    = shift @_;                     
@@ -84,8 +87,9 @@
             
             return $self->{$key};
             
-        }
+        } # end
         
+        # add
         sub add(){
             
             my $self    = shift @_;            
@@ -94,10 +98,12 @@
                          
             push(@{$self->{$key}},$param);            
             
-            return 1;            
-        }
+            return 1;
+            
+        } # add
 
 
+        # process
 
         sub process(){
             
@@ -106,7 +112,11 @@
             my @pages;
             
             my $lv;
-            $lv->{'page_no'} = 0;
+            $lv->{'page_no'}     = 0;
+            
+            $self->{'scale'}     = $self->getScale();
+            
+            $lv->{'scale_value'} = $self->getScaleValue();
                         
             # remove earlier file
             
@@ -186,11 +196,11 @@
                         
                     } # end
                                                             
-                    # each page additon                    
-                    if($file_in->{'format'}=~m/pdf/){
-                                               
+                    # pdf route             
+                    if($file_in->{'format'}=~m/pdf/){                                           
                         
-                        my @vec          =  prForm($self->{'content_dir'}."/$page");                        
+                        my @vec          =  prForm({'file'=>$self->{'content_dir'}."/$page"});
+                        
                         my ($from, $pos) = prText(0,0,'');
                         
                         $lv->{'img_mbox_height'}=$vec[4];
@@ -215,32 +225,38 @@
                         # doc                        
                         prDoc( { file  => $self->{'content_dir'}."/$page",
                                  first => 1,
-                                 last  => 1 });
+                                 last  => 1});
+                        
+                       # prPage();
                     
-                    } #
-                    
-                    if($file_in->{'format'}=~m/jpg/){
+                    }elsif($file_in->{'format'}=~m/jpg/){ # module for jpg
                         
                             # frame                        
                             if ($self->{'frame'}) {
-                                prForm($self->{'frame'}); 
+                                prForm({'file'=>$self->{'frame'},
+                                        'size'=>$lv->{'scale_value'}
+                                        }); 
                             }
                         
                             # get image
                             $lv->{'src_image'} = image_info($self->{'content_dir'}."/$page");
                             
-                            ($lv->{'img_width'},$lv->{'img_height'})  = dim($lv->{'src_image'});
-                            
+                            # get image width & height
+                            ($lv->{'img_width_s'},$lv->{'img_height_s'})  = dim($lv->{'src_image'});
+                                                      
+                            #adjust with conversion                                                                                       
+                            $lv->{'img_width'}  = sprintf("%.f",($lv->{'scale_value'}*$lv->{'img_width_s'}));
+                            $lv->{'img_height'} = sprintf("%.f",($lv->{'scale_value'}*$lv->{'img_height_s'}));
+                                                   
                             $lv->{'img_extra'}  = $self->{'image_extra'};
                        
-                            $lv->{'img_mbox_width'}  = ($lv->{'img_width'}+$self->{'image_padding'}->{'left'}+$self->{'image_padding'}->{'right'});
-                            $lv->{'img_mbox_height'} = ($lv->{'img_height'}+$self->{'image_padding'}->{'top'}+$self->{'image_padding'}->{'bottom'});
+                            $lv->{'img_mbox_width'}  = sprintf("%.f",($lv->{'img_width'}+$self->{'image_padding'}->{'left'}+$self->{'image_padding'}->{'right'}));
+                            $lv->{'img_mbox_height'} = sprintf("%.f",($lv->{'img_height'}+$self->{'image_padding'}->{'top'}+$self->{'image_padding'}->{'bottom'}));
                         
                             # page box
-                            prMbox (0,0,$lv->{'img_mbox_width'},$lv->{'img_mbox_height'});
-                           
-                            $lv->{'image_content'}  = prJpeg($self->{'content_dir'}."/$page",$lv->{'img_width'},$lv->{'img_height'});
-                           
+                             prMbox (0,0,$lv->{'img_mbox_width'},$lv->{'img_mbox_height'});
+                            
+                            $lv->{'image_content'}  = prJpeg($self->{'content_dir'}."/$page",$lv->{'img_width_s'},$lv->{'img_height_s'});                           
                             $lv->{'img_str'} = "q\n";
                             
                             # the two parameters after width represents for skew
@@ -248,11 +264,14 @@
                             
                             #$lv->{'img_str'}.= "$lv->{img_width} <skew right> <perspective left> $lv->{img_height} <padding_left> <padding_bottom> cm\n";
                             
-                            $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} $self->{'image_padding'}->{'left'} $self->{'image_padding'}->{'bottom'}  cm\n";
-                            $lv->{'img_str'}.= "/$lv->{'image_content'} Do\n";
+                            $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} $self->{image_padding}->{left} $self->{image_padding}->{bottom}  cm\n";
+                            $lv->{'img_str'}.= "/$lv->{image_content} Do\n";
                             $lv->{'img_str'}.= "Q\n";
+                            
                             prAdd($lv->{'img_str'});
-                           
+                            
+                            #print Dumper($lv);
+                            
                             # each line
                             for my $line (@{$self->{'content'}}){                                            
                             
@@ -280,11 +299,13 @@
             
             # template
             if ($self->{'template_content'}) {
+                
+                    $self->setScale('PT');
                                
                     # frame                        
                     if($self->{'frame'}){                                                
                                                     
-                        my @vec                 =  prForm($self->{'frame'});                        
+                        my @vec                 = prForm($self->{'frame'});                        
                         
                         my ($from, $pos)        = prText(0,0,'');
                         
@@ -318,7 +339,8 @@
                                  $lv->{'var_index'}++;
                             
                             } # end
-                    
+                            
+                           # prPage();
                             # doc                        
                             prDoc({ file  => $self->{'frame'},
                                     first => 1,
@@ -387,8 +409,8 @@
             my $self    = shift @_;            
             my $param   = shift @_;
             
-            return $self->{'content_dir'} || 0;            
-        
+            return $self->{'content_dir'} || 0;
+            
         }
         
         sub setContentDir(){
@@ -423,8 +445,7 @@
             my $self    = shift @_;            
             my $param   = shift @_;
             
-            my $current = $self->{'_default'};
-            
+            my $current = $self->{'_default'};            
             return $current;
         }
         
@@ -441,8 +462,7 @@
             # each var
             for my $param_key (keys(%{$param})){                
                 $current->{$param_key}=$param->{$param_key} if( (exists $param->{$param_key}) && (exists $current->{$param_key}) );                
-            }             
-            
+            }                         
             return 1;
         }
         
@@ -452,8 +472,7 @@
             my $self    = shift @_;            
             my $param   = shift @_;
             
-            my $current = $self->{'_options'};
-            
+            my $current = $self->{'_options'};            
             return $current;
         }
         
@@ -485,8 +504,8 @@
             my $param   = shift @_;
             
             for my $area(qw/left top right bottom/){
-            
-                $self->{'image_padding'}->{$area} = $param->{$area}   if($param->{$area})             
+                            
+                $self->{'image_padding'}->{$area} = sprintf("%.f",($param->{$area}*$self->getScaleValue()))   if($param->{$area});
             
             }
             
@@ -621,30 +640,53 @@
             
             return $_[0]->get('template_style'); 
         }
+        
+         
+        # set scale
+        sub setScale(){
+            
+            $_[0]->set($_[1],'scale');            
+        }
+        
+        # get scale
+        sub getScale(){            
+            return $_[0]->get('scale') || $_[0]->{'_default'}->{'scale'}; 
+        }
+        
+        # get scale value
+        sub getScaleValue(){            
+            return $_[0]->{'scale_ratio'}->{$_[0]->getScale()}; 
+        }
+        
+        
         # text layer
         sub addTextLayer(){
             
             my $self  = shift @_;
-            my $line  = shift @_;
+            my %line  = %{shift @_};
             
             my $lv = shift @_;
+                       
+            prAdd($self->hex2pdfrgb($line{'color'})." rg\n");
            
-            prAdd($self->hex2pdfrgb($line->{'color'})." rg\n");
+            prFont($line{font} || $self->{'_default'}->{'font'});
            
-            prFont($line->{font} || $self->{'_default'}->{'font'});
-           
-            prFontSize($line->{'font_size'} || $self->{'_default'}->{'font_size'});
+            prFontSize($line{'font_size'} || $self->{'_default'}->{'font_size'});
+            
+            $lv->{'x'}  = $line{'pos'}{'x'}*$self->getScaleValue();
+            $lv->{'y'}  = $line{'pos'}{'y'}*$self->getScaleValue();
                       
-            $line->{'pos'}->{'yi'} = ($lv->{'img_mbox_height'}-$line->{'pos'}->{'y'});
+            $lv->{'yi'} = ($lv->{'img_mbox_height'}-$lv->{'y'});
+            
            
-            prText($line->{'pos'}->{'x'},
-                   $line->{'pos'}->{'yi'},
-                  (($line->{'text'}->{'key'})?$lv->{$line->{'text'}->{'key'}}:$line->{'text'})
+            prText($lv->{'x'},
+                   $lv->{'yi'},
+                  (($line{'text'}->{'key'})?$lv->{$line{'text'}->{'key'}}:$line{'text'})
             );
             
             return 1;
                           
-        }
+        }  # text layer
         
         
         # hex to rgb 
@@ -716,7 +758,9 @@
             $lv->{'img_str'}.= "$lv->{img_width} 0 0 $lv->{img_height} $param->{'x'} $param->{'yi'}  cm\n";
             $lv->{'img_str'}.= "/$lv->{'image_content'} Do\n";
             $lv->{'img_str'}.= "Q\n";
-            prAdd($lv->{'img_str'})
+            prAdd($lv->{'img_str'});
+                               
+            return 1;            
                         
         }
         

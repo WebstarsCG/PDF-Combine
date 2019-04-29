@@ -1,0 +1,8 @@
+1. yi implementation or auto reverse (OK)
+2. image left,right,top,bottom (OK)
+3. custom page content (OK)
+4. Single Background & Multiple layer conent(OK)
+4.1. Image Addition
+5. Wiki Update
+6. Color in hexadecimal (OK)
+7. Custom Font

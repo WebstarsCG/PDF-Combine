@@ -22,36 +22,36 @@
                                                                     
                                         {
                                             # text color
-                                            'color'     => '#545454',
+                                            'color'     => '#121212',
                                             
                                             # font
-                                            'font'      => 'Helvetica',
+                                            'font'      => 'Helvetica-bold',
                                             
                                             # text size
-                                            'font_size' => 16,  
+                                            'font_size' => 32,  
                                             
                                             # position
                                             'pos'       => {'x' =>20,                                                     
-                                                            'y' =>18},                                                                                 
+                                                            'y' =>575},                                                                                 
                                             
                                             # text with key for default information
-                                            'text'       => {'key'=>'title'},
+                                            'text'       => {'key'=>'page_no'},
                                         },
                                         
                                         
                                         {
                                             # text color
-                                            'color'     => '#fff4cc',
+                                            'color'     => '#454545',
                                             
                                             # font
                                             'font'      => 'Helvetica',
                                             
                                             # text size
-                                            'font_size' => 12,  
+                                            'font_size' => 9,  
                                             
                                             # position
-                                            'pos'       => {'x' =>1250,                                                     
-                                                            'y' =>18},                                                                                 
+                                            'pos'       => {'x' =>20,                                                     
+                                                            'y' =>600},                                                                                 
                                             
                                             # text with key for default information
                                             'text'       => 'Perl Sites'

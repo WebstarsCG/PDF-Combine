@@ -8,7 +8,9 @@
         use CGI::Carp qw/fatalsToBrowser/;
         
         # include lib
-        use PDF::Composite;        
+        use PDF::Composite;
+        
+        print "Content-type:text/html\n\n";
         
         # object instance with configuration                             
         my $d = new PDF::Composite();
@@ -22,15 +24,18 @@
         # set output file name
         $d->setFileOut("pdfs/perl_website_jpg_screens_bulk.pdf");          
         
-        # content to show default document page title
+        #content to show default document page title
         $d->addContent({
             
-                        'color'     => '#626262',
+                        'color'     => '#121212',
+                        
+                         
+                        'font_size'=>14 ,
                         
                         'font'      => 'Arial-bold', 
                         
-                        'pos'       => {'x'  =>50,
-                                        'y'  =>40},
+                        'pos'       => {'x'  =>35,
+                                        'y'  =>45},
                         'text'      => {'key'=>'title'}}
                     );
                         
@@ -38,23 +43,23 @@
         # content to show current page no
         $d->addContent({'color' => '#ffefb2',
                         
-                        'font_size'=>12,
+                        'font_size'=>11,
                         
-                        'pos' => {'x'  =>1200,
-                                  'y'  =>40},                        
+                        'pos' => {'x'  =>1150,
+                                  'y'  =>45},                        
                         'text'=> {'key'=>'page_no'}}); 
                         
         # custom text
         $d->addContent({
                         'color' => '#b28e00',
                         
-                        'font_size'=>13,
+                        'font_size'=>11,
                         
                         'font'     =>'Helvetica-bold', 
                         
-                        'pos' => {'x'  =>1210,
-                                  'y'  =>40},                        
-                        'text'=> '| PDF::Composite',
+                        'pos' => {'x'  =>1160,
+                                  'y'  =>45},                        
+                        'text'=> ' | PDF::Composite',
                         
                         });
         
@@ -66,10 +71,10 @@
                                                         
                                                         'color'     => '#818181',
                                                         'font'      => 'Helvetica',
-                                                        'font_size' => 16,  
+                                                        'font_size' => 11,  
                                                         
-                                                        'pos'       => {'x' =>520,
-                                                                        'y' =>415},                                                                                 
+                                                        'pos'       => {'x' =>500,
+                                                                        'y' =>403},                                                                                 
                                                         
                                                         # custom text
                                                         'text'       =>'Give your search here...',
@@ -81,13 +86,13 @@
         
         # set extra space to image area
         $d->setImagePadding({
-                           'left'   => 40,
-                           'top'    => 100,
-                           'right'  => 20,
-                           'bottom' => 20,
+                           'left'   => 10,
+                           'top'    => 90,
+                           'right'  => 10,
+                           'bottom' => 30,
                            });
 
-        print "Content-type:text/html\n\n";
+        
         
         # file process
         if($d->process()){            
