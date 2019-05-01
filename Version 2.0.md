@@ -7,6 +7,39 @@ There are cases, we have to produce bulk PDF documents based on fixed design wit
 
 Now PDF::Composite offers a Template based content generation over a fixed design frame. The content can be defined in AoA or simply a .csv file. Each column style can be defined with position & styling attributes.
 
+####Set Template Content
+```perl
+# set template content
+$d->setTemplateContent([['Person A'],
+                        ['Person B']
+                        ]);
+
+# set template style         
+# 1 st col
+$d->addTemplateStyle({            
+                'color'     => '#242424',                        
+                'font'      => 'Arial-bold',
+                'font_size' => 72,
+                'pos'       => {'x'  =>170,
+                                'y'  =>465}
+            });
+```
+####Content from CSV
+Template content can be taken from CSV
+```perl
+$d->setTemplateContentFromCSV("csv/student_ii.csv");
+``` 
+Image also can be passed in template.(Like a signature in certificate case)
+```perl
+$d->addTemplateStyle({       
+                    'is_img'        => 1,
+                    'default'       => 'screens/template/sign_raj.jpg',
+                    'x'             => 180,
+                    'y'             => 690,
+                    'scale'         => 75
+                });
+```
+
 # Version 2.0
 We updated a Version 2.0 with some key improvements in feature & communination
 
