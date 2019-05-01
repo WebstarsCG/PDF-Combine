@@ -35,6 +35,7 @@ We are welcoming usage feedbacks & suggestions.
 
 ## Limitations
 - Presently it will take only one page from PDF inputs 
+- Takes only jpeg images
 
 ## Copyright and license
 
