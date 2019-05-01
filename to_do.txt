@@ -2,7 +2,7 @@
 2. image left,right,top,bottom (OK)
 3. custom page content (OK)
 4. Single Background & Multiple layer conent(OK)
-4.1. Image Addition
+4.1. Image Addition (OK)
 5. Wiki Update
 6. Color in hexadecimal (OK)
 7. Custom Font
