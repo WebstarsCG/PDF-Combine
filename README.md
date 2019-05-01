@@ -2,11 +2,11 @@
 Create PDF from bulk of images & PDF documents. 
 
 ## Purpose & Usage
-The perl module helps to create PDF documents from multiple images or documents resides in a directory. Very first, it created for creation of software demo documentation. Where we had a manual word based document and finally producing it a PDF. Due to the lengthy manual procedure, we always distanced it from doing it. One fine day, we had a requirement to show a software screen shot document with a minimal time. The existing method need more hands to finish it in time. 
+The perl module helps to create PDF documents from multiple images or PDF documents resides in a directory. Very first, it created for creation of software demo documentation. Where we had a manual word based document and finally producing it a PDF. Due to the lengthy manual procedure, the programmers always distanced from doing it. One fine day, we had a requirement to show a software screenshot document with a minimal time availability that never possible in our existing process.
 
-We worked out a small pdf document creations script based on Perl module PDF::Reuse. We put the screen shots in a directory with sequential content based naming like ( 1_Login.pdf,2.Project_Desk.pdf). The script concated all the pdfs in the name order and kept the file name as a title of the page. It's worked that day, we will be able to reduce time on every time. It's continiously improved based on supporting images, multiple text content & more. 
+We worked out a small pdf document creations script based on Perl module PDF::Reuse that we used earlier. We put the screen shots in a directory with sequential content based naming like ( 1_Login.pdf,2.Project_Desk.pdf). The script concated all the pdfs in the name order and kept the file name as a title of the page. It's worked that day, from there it's continiously improved based on real time usage inputs.
 
-We hope it may helpful in smilar needs. The module available with basic usage method & we are improving documentation. 
+We hope the module helpful in smilar needs. The module available with basic usage method & we are improving documentation. 
 We are welcoming usage feedbacks & suggestions.
 
 ## How to
