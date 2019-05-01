@@ -14,10 +14,14 @@ We are welcoming usage feedbacks & suggestions.
   -  PDF::Reuse
   -  Image::Info
 - Check the samples 
-  -  simple_pdf_bulk.pl -> create a PDF from multiple one page pdf's
-  -  simple_image_bulk.pl -> create a PDF from multiple jpeg images from given directory
-  -  simple_template.pl -> create a PDF from template and content from AoA
-  -  simple_template_csv.pl -> create a PDF from template and content from CSV file
+  - 1_hello_pdf_bulk.pl       -> create a PDF from multiple one page pdf's
+  - 2_simple_image_bulk.pl    -> create a PDF from multiple jpeg images from given directory with additional content
+  - 3_simple_pdf_bulk.pl      -> create a PDF from multiple one page pdf's and content from AoA
+  - 4_simple_template.pl      -> create a PDF based on template pdf & content from AoA
+  - 5_simple_template_csv.pl  -> create a PDF from template pdf and content from CSV file
+  - 6_demo_images.pl          -> demo pdf creation 
+  - 7_demo_doc.pl             -> demo document creation for demo process
+  
   - The Object Instance will take inputs from both Bulk AoH input and propoerty level set & get methods
 
 ## Directories
