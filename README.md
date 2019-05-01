@@ -13,7 +13,7 @@ We are welcoming usage feedbacks & suggestions.
 - Make sure the availability of modules 
   -  PDF::Reuse
   -  Image::Info
-- Check the samples 
+## Check the samples 
   - 1_hello_pdf_bulk.pl       -> create a PDF from multiple one page pdf's
   - 2_simple_image_bulk.pl    -> create a PDF from multiple jpeg images from given directory with additional content
   - 3_simple_pdf_bulk.pl      -> create a PDF from multiple one page pdf's and content from AoA
