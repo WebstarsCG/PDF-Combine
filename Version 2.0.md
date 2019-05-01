@@ -7,7 +7,7 @@ There are cases, we have to produce bulk PDF documents based on fixed design wit
 
 Now PDF::Composite offers a Template based content generation over a fixed design frame. The content can be defined in AoA or simply a .csv file. Each column style can be defined with position & styling attributes.
 
-####Set Template Content
+#### Set Template Content
 ```perl
 # set template content
 $d->setTemplateContent([['Person A'],
@@ -24,7 +24,7 @@ $d->addTemplateStyle({
                                 'y'  =>465}
             });
 ```
-####Content from CSV
+#### Content from CSV
 Template content can be taken from CSV
 ```perl
 $d->setTemplateContentFromCSV("csv/student_ii.csv");
