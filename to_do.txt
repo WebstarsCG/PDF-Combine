@@ -1,0 +1,23 @@
+1. yi implementation or auto reverse (OK)
+2. image left,right,top,bottom (OK)
+3. custom page content (OK)
+4. Single Background & Multiple layer conent(OK)
+4.1. Image Addition (OK)
+5. Wiki Update
+5.1 -> Method Index
+5.2 -> Demo
+5.3 -> Tutorial
+6. Color in hexadecimal (OK)
+7. Custom Font
+8. setPageContent
+   setTemplateContent - OK
+   setPageStyle -> Need for bulk and individual token or index based content setup
+9. POD Integration
+10. CPAN Integration
+11. text position x & y direct (OK)
+12. Image padding as Array method/position (OK)
+13. Plain Names (OK)
+14. Naming Convention
+      1. font_size-> fontSize
+      2. is_img -> isImg
+      3. setImagePadding -> setFramePadding->
