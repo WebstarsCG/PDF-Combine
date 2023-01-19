@@ -149,14 +149,14 @@
             
                 
             # Capture Pattern (Integer & Name), Pattern based index capturing            
-            $lv->{'file_capture'}->{'IN'} = { 'pattern'         => qr/(\d+\.*\d*)(\_?)(.*?)(\.(pdf|jpg))/is,
+            $lv->{'file_capture'}->{'IN'} = { 'pattern'         => qr/(\d+\.*\d*)(\_?)(.*?)(\.(pdf|jp(e{0,1})g))/is,
                                               'file_num_idx'    => 0,
                                               'file_spliter_idx'=> 1,
                                               'file_name_idx'   => 2,
                                               'file_format_idx' => 3,
                                             };
             
-            $lv->{'file_capture'}->{'PN'} = { 'pattern'         => qr/(.*?)(\.(pdf|jpg))/is,
+            $lv->{'file_capture'}->{'PN'} = { 'pattern'         => qr/(.*?)(\.(pdf|jpg|jp(e{0,1})g))/is,
                                               'file_num_idx'    => '',
                                               'file_spliter_idx'=> '',
                                               'file_name_idx'   => 0,
@@ -189,7 +189,7 @@
                 $file_in->{'token'}   = lc($file_in->{'idx'}.$file_in->{'spliter'}.$file_in->{'name'});
                                
                 
-                if ($file_in->{'format'}=~m/(pdf|jpg)/){                    
+                if ($file_in->{'format'}=~m/(pdf|jp(e{0,1})g)/i){                    
                 
                     # page counter
                     $lv->{'page_no'}++;
@@ -236,7 +236,7 @@
                         
                        # prPage();
                     
-                    }elsif($file_in->{'format'}=~m/jpg|png/){ # module for jpg
+                    }elsif($file_in->{'format'}=~m/jp(e{0,1})g|png/){ # module for jpg
                         
                             # frame                        
                             if ($self->{'frame'}) {
