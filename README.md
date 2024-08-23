@@ -1,4 +1,4 @@
-# PDF::Composite
+# PDF::Combine
 Create PDF from bulk of images & PDF documents. 
 
 ## Purpose & Usage
@@ -14,23 +14,21 @@ We are welcoming usage feedbacks & suggestions.
   -  PDF::Reuse
   -  Image::Info
 ## Check the samples 
-  - 1_hello_pdf_bulk.pl       -> create a PDF from multiple one page pdf's
-  - 2_simple_image_bulk.pl    -> create a PDF from multiple jpeg images from given directory with additional content
-  - 3_simple_pdf_bulk.pl      -> create a PDF from multiple one page pdf's and content from AoA
-  - 4_simple_template.pl      -> create a PDF based on template pdf & content from AoA
-  - 5_simple_template_csv.pl  -> create a PDF from template pdf and content from CSV file
-  - 6_demo_images.pl          -> demo pdf creation 
-  - 7_demo_doc.pl             -> demo document creation for demo process
+  - a_combine_pdf.pl       		   		-> create a PDF from multiple one page pdf's
+  - b_combine_pdf_addon_text.pl    		-> create a PDF from multiple jpeg images from given directory with additional content
+  - c_combine_img.pl     		   		-> create a PDF from images in a directory
+  - d_combine_img_frame.pl         		-> create a PDF with a layout frame and write the content over it.
+  - e_combine_img_ordered.pl  			-> in PDF creation from images, the page will be ordered to images names
+  - f_combine_img_frame_addon_text.pl   -> in PDF pages with addition of custom content
+  - g_template_content.pl             	-> create a PDF with a base template pdf and creating pages from a AoA content configuration for each page
+  - h_template_content_csv.pl			-> create a PDF with a base template pdf with content from a csv file
   
   - The Object Instance will take inputs from both Bulk AoH input and propoerty level set & get methods
 
 ## Directories
-- lib/PDF has the library module
-- screens/pdf has sample pdf's for demo
-- screens/jpg has sample jpeg images for demo
-- screens/frame has sample frame for demo
-- screens/csv has csv data for template based demo
-- pdfs -> area for storing created pdf documents
+- lib/PDF/ -> has the library module
+- content/ -> folder has the images used in demo
+- pdf_out/ -> folder has the demo created pdf documents
 
 ## To Do
 - Elabrative Documentation
