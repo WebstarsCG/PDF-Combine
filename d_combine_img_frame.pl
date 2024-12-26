@@ -14,10 +14,10 @@ print "Content-type:text/html\n\n";
 my $d = new PDF::Combine({'fileNameFormat' =>'IN'});
 
 # set content dir
-$d->setContentDir("content/jpg/zoho/admin_console_user");
+$d->setContentDir("content/jpg/web_ordered");
 
 # set frame        
-$d->setFrame("content/frame/frame_1399w_868h.pdf");
+$d->setFrame("content/frame/frame_1399w_746h.pdf");
 
 # set global padding to the image
 $d->setImagePadding({'top'=>100});
@@ -39,16 +39,7 @@ $d->addContent({'color'     => '#454545',
 				'text'      => {'key'=>'page_no'},
 				'x'         => 1145,
 				'y'         => 55});
-				 
-				
-# custom text
-$d->addContent({
-				'color'     => '#454545',
-				'font_size' => 11,                        
-				'font'      =>'Helvetica-bold',  
-				'text'      => ' |  Zoho Mail',
-				'x'         => 1160,
-				'y'         => 55});
+
 		
 
 # do the combine process
